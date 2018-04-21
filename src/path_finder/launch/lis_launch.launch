@@ -1,0 +1,5 @@
+<launch>
+	<node pkg="path_finder" type="pub.py" name="servo_cmd" output="screen">
+
+	</node>
+</launch>

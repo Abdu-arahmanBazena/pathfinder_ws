@@ -1,0 +1,8 @@
+prefix=/home/abdo/pathfinder_ws/install
+
+Name: path_finder
+Description: Description of path_finder
+Version: 0.0.0
+Cflags: -I/home/abdo/pathfinder_ws/install/include
+Libs: -L/home/abdo/pathfinder_ws/install/lib 
+Requires: 
