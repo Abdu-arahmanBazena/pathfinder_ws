@@ -10,7 +10,7 @@ def talker():
     servoStatus = 1
     pub = rospy.Publisher('servo', UInt16, queue_size=10)
     rospy.init_node('servo_cmd', anonymous=True)
-    rate = rospy.Rate(1) # 10hz
+    rate = rospy.Rate(2) # 10hz
     while not rospy.is_shutdown():
 	    angle= 90
 	    rospy.loginfo(angle)

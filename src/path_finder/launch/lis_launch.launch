@@ -1,5 +1,8 @@
 <launch>
-	<node pkg="path_finder" type="pub.py" name="servo_cmd" output="screen">
+	<node pkg="path_finder" type="arduinoListener.py" name="arduino_readings_listener" output="screen">
+
+	</node>
+	<node pkg="path_finder" type="infrared_sensors.py" name="infrared_sensors" output="screen">
 
 	</node>
 </launch>
