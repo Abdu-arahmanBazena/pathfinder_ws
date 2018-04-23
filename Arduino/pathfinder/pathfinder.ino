@@ -3,7 +3,7 @@
 #include <ros/time.h>
 #include "Ultrasonic.h" 
 #include <Wire.h> //I2C Arduino Library
-#include <Adafruit_HMC5883_U.h>
+//#include <Adafruit_HMC5883_U.h>
 //#include <Servo.h> 
 
 //Servo servo;
@@ -61,7 +61,7 @@ void loop() {
   ard_msg.ir_left = getRange(analog_pin1);
  
   
-  ard_msg.compass_x = getdirection;
+  ard_msg.compass_x = 0;
   ard_msg.compass_y = 0;
   ard_msg.compass_z = 0;
   ard_msg.servo_angle = 0;

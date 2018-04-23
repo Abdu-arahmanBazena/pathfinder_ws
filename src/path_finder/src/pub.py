@@ -7,7 +7,6 @@ from std_msgs.msg import UInt16
 
 def talker():
     angle = 0
-    servoStatus = 1
     pub = rospy.Publisher('servo', UInt16, queue_size=10)
     rospy.init_node('servo_cmd', anonymous=True)
     rate = rospy.Rate(2) # 10hz

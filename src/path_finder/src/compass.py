@@ -9,6 +9,7 @@ def callback(data):
     x = data.data[0]
     y = data.data[1]
     z = data.data[2]
+    getDirections(x ,y ,z)
     #pass the data to the function that works out the direction
 def getDirections(x , y , z):
     #get directions logic
@@ -22,7 +23,7 @@ def getDirections(x , y , z):
     #log the msg to the terminal
     rospy.loginfo(direction_msg)
     #publish the msg
-    pub.publish(String, direction_msg)
+    pub.publish(direction_msg)
 def listener():
     rospy.init_node('compass', anonymous=True)
     rospy.Subscriber("/compass_raw_readings", Float64MultiArray, callback)
