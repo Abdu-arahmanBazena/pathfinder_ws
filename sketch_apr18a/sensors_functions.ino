@@ -21,6 +21,7 @@ float getRangeUlt( int pin)
   Ultrasonic ultrasonic;
   return ultrasonic.UltrasonicRangerRead(pin);  
 }
+
 void moveForward()
 {
   digitalWrite(10 , LOW);
@@ -32,3 +33,31 @@ void moveForward()
 }
 
 
+void stopMotors()
+{
+  digitalWrite(10 , LOW);
+  digitalWrite(11 , LOW);
+  
+  digitalWrite(12 , LOW);
+  digitalWrite(13 , LOW);
+  
+}
+void turnRight()
+{
+    digitalWrite(10 , LOW);
+    digitalWrite(11 , HIGH);
+    
+    digitalWrite(13 , LOW);
+    digitalWrite(12 , LOW);
+ 
+   
+}
+void turnLeft()
+{
+    digitalWrite(10 , LOW);
+    digitalWrite(11 , LOW);
+    
+    digitalWrite(13 , HIGH);
+    digitalWrite(12 , LOW); 
+    delay(2.5); 
+}

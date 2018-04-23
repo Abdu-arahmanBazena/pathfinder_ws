@@ -16,15 +16,36 @@ ros:: NodeHandle nh;
 path_finder::ard ard_msg;
 
 
-void servo_cb( const std_msgs::UInt16& cmd_msg){
+void actionCallBack( const std_msgs::UInt16& cmd_msg){
 
-    moveForward();
+    if(cmd_msg.data == 1)
+    {
+      //turn left
+      turnLeft();
+      
+    }
+    else if(cmd_msg.data == 2)
+    {
+      //teurn right 
+      turnRight();  
+    }
+    else if(cmd_msg.data == 3)
+    {
+      //turn   
+    }
+    else if(cmd_msg.data == 4){}
+    else
+    {
+      //stop
+      stopMotors();
+    }
+    
   
   //servo.write(cmd_msg.data); //set servo angle, should be from 0-180  
  // digitalWrite(13);  //toggle led  
 }
 
-ros::Subscriber<std_msgs::UInt16> sub("/cmd_vel_action", servo_cb);
+ros::Subscriber<std_msgs::UInt16> sub("/cmd_vel_action", actionCallBack);
 
 ros::Publisher arduino("/arduino_readings", &ard_msg);
 
