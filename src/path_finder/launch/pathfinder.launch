@@ -1,0 +1,17 @@
+<launch>
+	<node pkg="path_finder" type="arduinoListener.py" name="arduino_readings_listener" output="screen">
+
+	</node>
+	<node pkg="path_finder" type="infrared_sensors.py" name="infrared_sensors" output="screen">
+
+	</node>
+	<node pkg="path_finder" type="compass.py" name="compass" output="screen">
+
+	</node>
+	<node pkg="path_finder" type="ultrasonic_sensors_servo.py" name="ultrasonic_sensors_servo" output="screen">
+
+	</node>
+	<node pkg="path_finder" type="pathfinder.py" name="pathfinder" 	output="screen">
+
+	</node>
+</launch>

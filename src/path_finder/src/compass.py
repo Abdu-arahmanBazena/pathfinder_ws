@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import rospy
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import String
 def callback(data):
@@ -15,13 +16,13 @@ def getDirections(x , y , z):
     #decalre the msg
     direction_msg = String()
     #decalre the publisher
-    pub = rospy.Publisher('/direction', Float64MultiArray, queue_size=10)
+    pub = rospy.Publisher('/direction', String, queue_size=10)
     #add the data to the msg
     direction_msg.data = "North"
     #log the msg to the terminal
     rospy.loginfo(direction_msg)
     #publish the msg
-    pub.publish(direction_msg)
+    pub.publish(String, direction_msg)
 def listener():
     rospy.init_node('compass', anonymous=True)
     rospy.Subscriber("/compass_raw_readings", Float64MultiArray, callback)

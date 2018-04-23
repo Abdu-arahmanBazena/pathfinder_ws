@@ -48,11 +48,11 @@ def compassPub(x , y , z):
     #declare the Publisher
     pub = rospy.Publisher('/compass_raw_readings', Float64MultiArray, queue_size=10)
     #add the data to the msg
-    compass_msg = [x , y , z]
+    compass_msg.data = [x , y , z]
     #log the msg to the terminal
     rospy.loginfo(compass_msg)
     #publish the msg
-    pub.publish(Float64MultiArray ,compass_msg)
+    pub.publish(compass_msg)
 
 
 def listener():
