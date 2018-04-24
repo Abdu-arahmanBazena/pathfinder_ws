@@ -22,18 +22,23 @@ void actionCallBack( const std_msgs::UInt16& cmd_msg){
     {
       //turn left
       turnLeft();
+      //stopMotors();
       
     }
     else if(cmd_msg.data == 2)
     {
       //teurn right 
-      turnRight();  
+      turnRight();
+      //stopMotors();  
     }
     else if(cmd_msg.data == 3)
     {
-      //turn   
+      stopMotors();  
     }
-    else if(cmd_msg.data == 4){}
+    else if(cmd_msg.data == 4)
+    {
+       moveForward();
+    }
     else
     {
       //stop
@@ -95,9 +100,9 @@ void loop() {
   ard_msg.stamp=nh.now();
   ard_msg.seq = seq;
   
-  delay(2.5);
+  
   ard_msg.ult_right = getRangeUlt(8);
-  delay(2.5);
+  
   ard_msg.ult_left = getRangeUlt(7);
   
   
@@ -112,7 +117,6 @@ void loop() {
     y = Wire.read()<<8; //Y msb
     y |= Wire.read(); //Y lsb
   }
-  
   ard_msg.compass_x = x;
   ard_msg.compass_y = y;
   ard_msg.compass_z = z;

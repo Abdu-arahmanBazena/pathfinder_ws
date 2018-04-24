@@ -44,7 +44,7 @@ void stopMotors()
 }
 void turnRight()
 {
-    digitalWrite(10 , LOW);
+    digitalWrite(10 , HIGH);
     digitalWrite(11 , HIGH);
     
     digitalWrite(13 , LOW);
@@ -58,6 +58,6 @@ void turnLeft()
     digitalWrite(11 , LOW);
     
     digitalWrite(13 , HIGH);
-    digitalWrite(12 , LOW); 
-    delay(2.5); 
+    digitalWrite(12 , HIGH);
+
 }

@@ -30,15 +30,15 @@ def infraredPub(ir_right , ir_left):
 
 
 def ultrasonicPub(ult_right , ult_left , servo_angle):
-    #decalre pub msg
+    # declare pub msg
     ult_srv_msg = Float64MultiArray()
-    #declare pub
+    # declare pub
     pub = rospy.Publisher('/ultrasonic_servo_angle', Float64MultiArray, queue_size=10)
-    #add data to the msg
+    # add data to the msg
     ult_srv_msg.data = [ult_right , ult_left , servo_angle]
-    #log the msg to the terminal
+    # log the msg to the terminal
     rospy.loginfo(ult_srv_msg)
-    #publish the msg
+    # publish the msg
     pub.publish(ult_srv_msg)
 
 
