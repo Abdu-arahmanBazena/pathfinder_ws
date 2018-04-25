@@ -4,8 +4,8 @@
 #include <std_msgs/UInt16.h>
 #include "Ultrasonic.h" 
 #include <Wire.h> //I2C Arduino Library
-
-#define address 0x1E //0011110b, I2C 7bit address of HMC5883
+#include <Arduino.h>
+#include <HMC5883L_Simple.h>
 
 //#include <Servo.h> 
 
@@ -14,7 +14,8 @@
 ros:: NodeHandle nh;
 
 path_finder::ard ard_msg;
-
+// Create a compass
+HMC5883L_Simple Compass;
 
 void actionCallBack( const std_msgs::UInt16& cmd_msg){
 
@@ -76,11 +77,10 @@ void setup() {
   nh.subscribe(sub);
   //compass code 
   Wire.begin();
-  //Put the HMC5883 IC into the correct operating mode
-  Wire.beginTransmission(address); //open communication with HMC5883
-  Wire.write(0x02); //select mode register
-  Wire.write(0x00); //continuous measurement mode
-  Wire.endTransmission();
+  Compass.SetDeclination(3, 4, 'E');
+  Compass.SetSamplingMode(COMPASS_SINGLE);
+  Compass.SetScale(COMPASS_SCALE_130);
+  Compass.SetOrientation(COMPASS_HORIZONTAL_X_NORTH);
 
 }
 
@@ -88,14 +88,7 @@ void loop() {
   const int analog_pin = A0;
   const int analog_pin1 = A1;
   seq++;
- 
-  int x,y,z; //triple axis data
 
-  //Tell the HMC5883L where to begin reading data
-  Wire.beginTransmission(address);
-  Wire.write(0x03); //select register 3, X MSB register
-  Wire.endTransmission();
-  
   ard_msg.frame_id = "/sensors_data";
   ard_msg.stamp=nh.now();
   ard_msg.seq = seq;
@@ -108,18 +101,10 @@ void loop() {
   
   ard_msg.ir_right = getRange(analog_pin);
   ard_msg.ir_left = getRange(analog_pin1);
- Wire.requestFrom(address, 6);
-  if(6<=Wire.available()){
-    x = Wire.read()<<8; //X msb
-    x |= Wire.read(); //X lsb
-    z = Wire.read()<<8; //Z msb
-    z |= Wire.read(); //Z lsb
-    y = Wire.read()<<8; //Y msb
-    y |= Wire.read(); //Y lsb
-  }
-  ard_msg.compass_x = x;
-  ard_msg.compass_y = y;
-  ard_msg.compass_z = z;
+ 
+  ard_msg.compass_x = Compass.GetHeadingDegrees();
+  ard_msg.compass_y = 0;
+  ard_msg.compass_z = 0;
   ard_msg.servo_angle = 0;
   arduino.publish( &ard_msg );
   nh.spinOnce();

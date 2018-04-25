@@ -7,10 +7,12 @@ from std_msgs.msg import String
 from std_msgs.msg import Float64MultiArray
 from threading import Thread
 
-finishBayDirection = ""
+finishBayDirection = 0
+right_direction = 116
+left_direction = 225
 ir_right = 0
 ir_left = 0
-currentDirection = ""
+currentDirection = 0
 ultRight = 0
 ultLeft = 0
 currentIrRight = 0
@@ -18,11 +20,12 @@ currentIrLeft = 0
 servoAngle = 0
 traveledDistance = 0
 
+
 def logDirection(data):
     # rospy.loginfo(data)
     global finishBayDirection
     global currentDirection
-    if finishBayDirection == "":
+    if finishBayDirection == 0:
         finishBayDirection = data.data
     currentDirection = data.data
 
@@ -61,25 +64,45 @@ def publishCmd_vel():
     global ir_left
     global currentIrRight
     global currentIrLeft
+    global currentDirection
+    global left_direction
+    global right_direction
+    left_direction = 116
+    right_direction = 225
     # publisher code
     pub = rospy.Publisher('/cmd_vel_action', UInt16, queue_size=10)
     rate = rospy.Rate(10)  # 10hz
     action_msg = UInt16()
     while not rospy.is_shutdown():
-        # print(ir_right)
-        # print(ir_left)
-        # print(currentIrRight)
-        # print(currentIrLeft)
         if currentIrRight > ir_right + 10 and currentIrLeft < ir_left + 10:
             # publish turn left
-            action_msg.data = 1
+            action_msg.data = 3
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
+            if currentDirection != left_direction:
+                action_msg.data = 1
+                rospy.loginfo(currentDirection)
+                while currentDirection != left_direction:
+                    rospy.loginfo(currentDirection)
+                    # rospy.loginfo(action_msg)
+                    pub.publish(action_msg)
+                    rospy.Subscriber("/direction", UInt16, logDirection)
+                    if currentDirection == left_direction:
+                        break
         elif currentIrRight < ir_right + 10 and currentIrLeft > ir_left + 10:
             # publish turn right
-            action_msg.data = 2
+            action_msg.data = 3
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
+            if currentDirection != right_direction:
+                action_msg.data = 2
+                while currentDirection != right_direction:
+                    rospy.loginfo(currentDirection)
+                    # rospy.loginfo(action_msg)
+                    pub.publish(action_msg)
+                    rospy.Subscriber("/direction", UInt16, logDirection)
+                    if currentDirection == right_direction:
+                        break
         elif currentIrRight > ir_right + 10 and currentIrLeft > ir_left + 10:
             action_msg.data = 3
             rospy.loginfo(action_msg)
@@ -99,7 +122,7 @@ def publishCmd_vel():
 def listener():
 
     rospy.init_node('pathfinder', anonymous=True)
-    rospy.Subscriber("/direction", String, logDirection)
+    rospy.Subscriber("/direction", UInt16, logDirection)
     rospy.Subscriber("/ult_srv_NF", Float64MultiArray, logUltServo)
     rospy.Subscriber("/infrared", Float64MultiArray, logIr)
     # rospy.Subscriber("/distance", Float64MultiArray, logIr)
