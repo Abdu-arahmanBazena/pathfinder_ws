@@ -5,7 +5,7 @@ import rospy
 from std_msgs.msg import UInt16
 from std_msgs.msg import String
 from std_msgs.msg import Float64MultiArray
-from threading import Thread
+import time
 
 finishBayDirection = 0
 right_direction = 116
@@ -75,40 +75,75 @@ def publishCmd_vel():
     action_msg = UInt16()
     while not rospy.is_shutdown():
         if currentIrRight > ir_right + 10 and currentIrLeft < ir_left + 10:
+
             # publish turn left
+            action_msg.data = 5
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1)
             action_msg.data = 3
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
-            pub.publish(action_msg)
-            pub.publish(action_msg)
+            time.sleep(1)
             action_msg.data = 1
-            # rospy.loginfo(action_msg)
             rospy.loginfo(action_msg)
-            seq = 0
-            while seq < 90 :
-                rospy.loginfo(action_msg)
-                pub.publish(action_msg)
-                seq += 1
+            pub.publish(action_msg)
+            time.sleep(1.2)
+            action_msg.data = 4
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1.2)
+            action_msg.data = 2
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1.2)
+
         elif currentIrRight < ir_right + 10 and currentIrLeft > ir_left + 10:
             # publish turn right
-            action_msg.data = 3
+            action_msg.data = 5  # stop first
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
-            pub.publish(action_msg)
-            pub.publish(action_msg)
-            action_msg.data = 2
-            rospy.loginfo(currentDirection)
-            # rospy.loginfo(action_msg)
+            time.sleep(1)
+            action_msg.data = 3  # go back
             rospy.loginfo(action_msg)
-            seq = 0
-            while seq < 90:
-                rospy.loginfo(action_msg)
-                pub.publish(action_msg)
-                seq += 1
+            pub.publish(action_msg)
+            time.sleep(1)
+            action_msg.data = 2  # turn right
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1.2)
+            action_msg.data = 4   # go forward
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1.2)
+            action_msg.data = 1  # turn left
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1.2)
+
         elif currentIrRight > ir_right + 10 and currentIrLeft > ir_left + 10:
+
+            action_msg.data = 5
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1)
             action_msg.data = 3
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
+            time.sleep(1)
+            action_msg.data = 1
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1.2)
+            action_msg.data = 4
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1.2)
+            action_msg.data = 2
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1.2)
+
         elif currentIrRight < ir_right + 10 and currentIrLeft < ir_left + 10:
             action_msg.data = 4
             rospy.loginfo(action_msg)

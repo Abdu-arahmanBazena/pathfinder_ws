@@ -24,10 +24,10 @@ float getRangeUlt( int pin)
 
 void moveReverse()
 {
-   analogWrite(9, 200);
-  analogWrite(6, 200);
-  analogWrite(3, 200);
-  analogWrite(5, 200);
+  analogWrite(9, 220);
+  analogWrite(6, 220);
+  analogWrite(3, 220);
+  analogWrite(5, 220);
   digitalWrite(10 , HIGH);
   digitalWrite(11 , LOW);
   
@@ -38,10 +38,10 @@ void moveReverse()
 
 void moveForward()
 {
-   analogWrite(9, 200);
-  analogWrite(6, 200);
-  analogWrite(3, 200);
-  analogWrite(5, 200);
+  analogWrite(9, 220);
+  analogWrite(6, 220);
+  analogWrite(3, 220);
+  analogWrite(5, 220);
   digitalWrite(10 , LOW);
   digitalWrite(11 , HIGH);
   
@@ -53,10 +53,10 @@ void moveForward()
 
 void stopMotors()
 {
-   analogWrite(9, 200);
-  analogWrite(6, 200);
-  analogWrite(3, 200);
-  analogWrite(5, 200);
+  analogWrite(9, 220);
+  analogWrite(6, 220);
+  analogWrite(3, 220);
+  analogWrite(5, 220);
   digitalWrite(10 , LOW);
   digitalWrite(11 , LOW);
   
@@ -66,10 +66,10 @@ void stopMotors()
 }
 void turnRight()
 {
-   analogWrite(9, 200);
-  analogWrite(6, 200);
-  analogWrite(3, 200);
-  analogWrite(5, 200);
+  analogWrite(9, 220);
+  analogWrite(6, 220);
+  analogWrite(3, 220);
+  analogWrite(5, 220);
     digitalWrite(10 , HIGH);
     digitalWrite(11 , HIGH);
     
@@ -80,10 +80,10 @@ void turnRight()
 }
 void turnLeft()
 {
-    analogWrite(9, 200);
-    analogWrite(6, 200);
-    analogWrite(3, 200);
-    analogWrite(5, 200);
+    analogWrite(9, 220);
+    analogWrite(6, 220);
+    analogWrite(3, 220);
+    analogWrite(5, 220);
     digitalWrite(10 , LOW);
     digitalWrite(11 , LOW);
     

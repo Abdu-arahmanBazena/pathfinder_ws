@@ -34,7 +34,7 @@ void actionCallBack( const std_msgs::UInt16& cmd_msg){
     }
     else if(cmd_msg.data == 3)
     {
-      moveReverse();  
+      moveReverse();
     }
     else if(cmd_msg.data == 4)
     {
