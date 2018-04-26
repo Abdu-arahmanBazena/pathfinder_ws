@@ -14,37 +14,37 @@ def callback(data):
     # log the msg to the terminal
     rospy.loginfo(data)
     infraredPub( data.ir_right , data.ir_left)
-    ultrasonicPub(data.ult_right , data.ult_left ,data.servo_angle)
-    compassPub(data.compass_x , data.compass_y , data.compass_z )
+    ultrasonicPub(data.ult_right, data.ult_left, data.servo_angle)
+    compassPub(data.compass_x, data.compass_y, data.compass_z)
 
 
-def infraredPub(ir_right , ir_left):
+def infraredPub(ir_right, ir_left):
     # decalre the msg
     ir_msg = Float64MultiArray()
     # decalre the publisher
     pub = rospy.Publisher('/ir_raw_readings', Float64MultiArray, queue_size=10)
     # add the data to the msg
-    ir_msg.data = [ir_right , ir_left]
+    ir_msg.data = [ir_right, ir_left]
     # log the msg to the terminal
     rospy.loginfo(ir_msg)
     # publish the msg
     pub.publish(ir_msg)
 
 
-def ultrasonicPub(ult_right , ult_left , servo_angle):
+def ultrasonicPub(ult_right, ult_left, servo_angle):
     # declare pub msg
     ult_srv_msg = Float64MultiArray()
     # declare pub
     pub = rospy.Publisher('/ultrasonic_servo_angle', Float64MultiArray, queue_size=10)
     # add data to the msg
-    ult_srv_msg.data = [ult_right , ult_left , servo_angle]
+    ult_srv_msg.data = [ult_right, ult_left, servo_angle]
     # log the msg to the terminal
     rospy.loginfo(ult_srv_msg)
     # publish the msg
     pub.publish(ult_srv_msg)
 
 
-def compassPub(x , y , z):
+def compassPub(x, y, z):
     # decalre the msg
     compass_msg = Float64MultiArray()
     # declare the Publisher

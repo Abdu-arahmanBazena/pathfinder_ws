@@ -1,11 +1,5 @@
 (cl:in-package path_finder-msg)
-(cl:export '(SEQ-VAL
-          SEQ
-          STAMP-VAL
-          STAMP
-          FRAME_ID-VAL
-          FRAME_ID
-          ULT_RIGHT-VAL
+(cl:export '(ULT_RIGHT-VAL
           ULT_RIGHT
           ULT_LEFT-VAL
           ULT_LEFT

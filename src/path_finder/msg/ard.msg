@@ -1,6 +1,3 @@
-uint32 seq
-time stamp
-string frame_id
 float64 ult_right
 float64 ult_left
 float64 ir_right

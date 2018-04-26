@@ -14,14 +14,11 @@
 
 (defclass path_finder::ard
   :super ros::object
-  :slots (_seq _stamp _frame_id _ult_right _ult_left _ir_right _ir_left _compass_x _compass_y _compass_z _servo_angle ))
+  :slots (_ult_right _ult_left _ir_right _ir_left _compass_x _compass_y _compass_z _servo_angle ))
 
 (defmethod path_finder::ard
   (:init
    (&key
-    ((:seq __seq) 0)
-    ((:stamp __stamp) (instance ros::time :init))
-    ((:frame_id __frame_id) "")
     ((:ult_right __ult_right) 0.0)
     ((:ult_left __ult_left) 0.0)
     ((:ir_right __ir_right) 0.0)
@@ -32,9 +29,6 @@
     ((:servo_angle __servo_angle) 0)
     )
    (send-super :init)
-   (setq _seq (round __seq))
-   (setq _stamp __stamp)
-   (setq _frame_id (string __frame_id))
    (setq _ult_right (float __ult_right))
    (setq _ult_left (float __ult_left))
    (setq _ir_right (float __ir_right))
@@ -44,15 +38,6 @@
    (setq _compass_z (float __compass_z))
    (setq _servo_angle (round __servo_angle))
    self)
-  (:seq
-   (&optional __seq)
-   (if __seq (setq _seq __seq)) _seq)
-  (:stamp
-   (&optional __stamp)
-   (if __stamp (setq _stamp __stamp)) _stamp)
-  (:frame_id
-   (&optional __frame_id)
-   (if __frame_id (setq _frame_id __frame_id)) _frame_id)
   (:ult_right
    (&optional __ult_right)
    (if __ult_right (setq _ult_right __ult_right)) _ult_right)
@@ -80,12 +65,6 @@
   (:serialization-length
    ()
    (+
-    ;; uint32 _seq
-    4
-    ;; time _stamp
-    8
-    ;; string _frame_id
-    4 (length _frame_id)
     ;; float64 _ult_right
     8
     ;; float64 _ult_left
@@ -107,12 +86,6 @@
    (&optional strm)
    (let ((s (if strm strm
               (make-string-output-stream (send self :serialization-length)))))
-     ;; uint32 _seq
-       (write-long _seq s)
-     ;; time _stamp
-       (write-long (send _stamp :sec) s) (write-long (send _stamp :nsec) s)
-     ;; string _frame_id
-       (write-long (length _frame_id) s) (princ _frame_id s)
      ;; float64 _ult_right
        (sys::poke _ult_right (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; float64 _ult_left
@@ -143,12 +116,6 @@
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
    (buf &optional (ptr- 0))
-   ;; uint32 _seq
-     (setq _seq (sys::peek buf ptr- :integer)) (incf ptr- 4)
-   ;; time _stamp
-     (send _stamp :sec (sys::peek buf ptr- :integer)) (incf ptr- 4)  (send _stamp :nsec (sys::peek buf ptr- :integer)) (incf ptr- 4)
-   ;; string _frame_id
-     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _frame_id (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
    ;; float64 _ult_right
      (setq _ult_right (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; float64 _ult_left
@@ -180,13 +147,10 @@
    self)
   )
 
-(setf (get path_finder::ard :md5sum-) "db57fb1eab133016c7f00c01572b2004")
+(setf (get path_finder::ard :md5sum-) "5ab222d10bef5cb8f3d8c151fb86bd8b")
 (setf (get path_finder::ard :datatype-) "path_finder/ard")
 (setf (get path_finder::ard :definition-)
-      "uint32 seq
-time stamp
-string frame_id
-float64 ult_right
+      "float64 ult_right
 float64 ult_left
 float64 ir_right
 float64 ir_left
@@ -199,6 +163,6 @@ uint64 servo_angle
 
 
 
-(provide :path_finder/ard "db57fb1eab133016c7f00c01572b2004")
+(provide :path_finder/ard "5ab222d10bef5cb8f3d8c151fb86bd8b")
 
 

@@ -2,9 +2,10 @@
 import threading
 
 import rospy
-from std_msgs.msg import UInt16
-from std_msgs.msg import String
 from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import UInt16MultiArray
+from std_msgs.msg import UInt16
+
 import time
 
 finishBayDirection = 0
@@ -20,6 +21,7 @@ currentIrLeft = 0
 servoAngle = 0
 traveledDistance = 0
 seq = 0
+servo_status = 1
 
 def logDirection(data):
     # rospy.loginfo(data)
@@ -38,6 +40,7 @@ def logUltServo(data):
     ultRight = data.data[0]
     ultLeft = data.data[1]
     servoAngle = data.data[2]
+    avoid_ob()
 
 
 def logIr(data):
@@ -57,9 +60,77 @@ def logIr(data):
     currentIrRight = data.data[0]
     global currentIrLeft
     currentIrLeft = data.data[1]
+    # avoid_drop()
 
 
-def publishCmd_vel():
+def avoid_ob():
+    # fhfkd
+    global ultRight
+    global ultLeft
+    global servoAngle
+    pub = rospy.Publisher('/cmd_vel_action', UInt16MultiArray, queue_size=10)
+    rate = rospy.Rate(2)  # 10hz
+    action_msg = UInt16MultiArray()
+    if ultRight <= 20 or ultLeft <= 20:
+        if servoAngle == 40:
+            action_msg.data = [0, 1]
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1.2)
+            action_msg.data = [0, 4]
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1)
+            action_msg.data = [60, 2]
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1.2)
+            # avoid obstacle from the right
+            # turn left
+            # then right
+            # try to go straight
+            servoAngle = 60
+        elif servoAngle == 60:
+            # avoid obstacle straight
+            servoAngle = 0
+        elif servoAngle == 90:
+            action_msg.data = [140, 2]
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1.2)
+            action_msg.data = [140, 4]
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1)
+            action_msg.data = [60, 1]
+            rospy.loginfo(action_msg)
+            pub.publish(action_msg)
+            time.sleep(1.2)
+            servoAngle = 60
+        rate.sleep()
+    else:
+        global servo_status
+        pub = rospy.Publisher('/cmd_vel_action', UInt16MultiArray, queue_size=10)
+        rate = rospy.Rate(2)  # 10hz
+        action_msg = UInt16MultiArray()
+        if servo_status == 1:
+            action_msg.data = [40, 4]
+            servo_status = 2
+        elif servo_status == 2:
+            action_msg.data = [60, 4]
+            servo_status = 3
+        elif servo_status == 3:
+            action_msg.data = [90, 4]
+            servo_status = 4
+        elif servo_status == 4:
+            action_msg.data = [60, 4]
+            servo_status = 1
+        rospy.loginfo(action_msg)
+        pub.publish(action_msg)
+        rate.sleep()
+
+
+def avoid_drop():
     global ir_right
     global ir_left
     global currentIrRight
@@ -70,86 +141,86 @@ def publishCmd_vel():
     left_direction = 116
     right_direction = 225
     # publisher code
-    pub = rospy.Publisher('/cmd_vel_action', UInt16, queue_size=10)
+    pub = rospy.Publisher('/cmd_vel_action', UInt16MultiArray, queue_size=10)
     rate = rospy.Rate(10)  # 10hz
-    action_msg = UInt16()
+    action_msg = UInt16MultiArray()
     while not rospy.is_shutdown():
         if currentIrRight > ir_right + 10 and currentIrLeft < ir_left + 10:
 
             # publish turn left
-            action_msg.data = 5
+            action_msg.data = [60, 5]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1)
-            action_msg.data = 3
+            action_msg.data = [60, 3]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1)
-            action_msg.data = 1
+            action_msg.data = [60, 1]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1.2)
-            action_msg.data = 4
+            action_msg.data = [60, 4]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1.2)
-            action_msg.data = 2
+            action_msg.data = [60, 2]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1.2)
 
         elif currentIrRight < ir_right + 10 and currentIrLeft > ir_left + 10:
             # publish turn right
-            action_msg.data = 5  # stop first
+            action_msg.data = [60, 5] # stop first
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1)
-            action_msg.data = 3  # go back
+            action_msg.data = [60, 3]  # go back
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1)
-            action_msg.data = 2  # turn right
+            action_msg.data = [60, 2] # turn right
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1.2)
-            action_msg.data = 4   # go forward
+            action_msg.data = [60, 4]   # go forward
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1.2)
-            action_msg.data = 1  # turn left
+            action_msg.data = [60, 1]  # turn left
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1.2)
 
         elif currentIrRight > ir_right + 10 and currentIrLeft > ir_left + 10:
 
-            action_msg.data = 5
+            action_msg.data = [60, 5]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1)
-            action_msg.data = 3
+            action_msg.data = [60, 3]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1)
-            action_msg.data = 1
+            action_msg.data = [60, 1]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1.2)
-            action_msg.data = 4
+            action_msg.data = [60, 4]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1.2)
-            action_msg.data = 2
+            action_msg.data = [60, 2]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
             time.sleep(1.2)
 
         elif currentIrRight < ir_right + 10 and currentIrLeft < ir_left + 10:
-            action_msg.data = 4
+            action_msg.data = [60, 4]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
         else:
-            action_msg.data = 0
+            action_msg.data = [60, 0]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
 
@@ -158,12 +229,11 @@ def publishCmd_vel():
 
 def listener():
     global seq
-    rospy.init_node('pathfinder', anonymous=True)
+    rospy.init_node('pathfinder', anonymous=False)
     rospy.Subscriber("/direction", UInt16, logDirection)
     rospy.Subscriber("/ult_srv_NF", Float64MultiArray, logUltServo)
     rospy.Subscriber("/infrared", Float64MultiArray, logIr)
     # rospy.Subscriber("/distance", Float64MultiArray, logIr)
-    publishCmd_vel()
     rospy.spin()
 
 if __name__ == '__main__':

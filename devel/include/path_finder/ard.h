@@ -24,10 +24,7 @@ struct ard_
   typedef ard_<ContainerAllocator> Type;
 
   ard_()
-    : seq(0)
-    , stamp()
-    , frame_id()
-    , ult_right(0.0)
+    : ult_right(0.0)
     , ult_left(0.0)
     , ir_right(0.0)
     , ir_left(0.0)
@@ -37,10 +34,7 @@ struct ard_
     , servo_angle(0)  {
     }
   ard_(const ContainerAllocator& _alloc)
-    : seq(0)
-    , stamp()
-    , frame_id(_alloc)
-    , ult_right(0.0)
+    : ult_right(0.0)
     , ult_left(0.0)
     , ir_right(0.0)
     , ir_left(0.0)
@@ -52,15 +46,6 @@ struct ard_
     }
 
 
-
-   typedef uint32_t _seq_type;
-  _seq_type seq;
-
-   typedef ros::Time _stamp_type;
-  _stamp_type stamp;
-
-   typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _frame_id_type;
-  _frame_id_type frame_id;
 
    typedef double _ult_right_type;
   _ult_right_type ult_right;
@@ -120,7 +105,7 @@ namespace message_traits
 
 
 
-// BOOLTRAITS {'IsFixedSize': False, 'IsMessage': True, 'HasHeader': False}
+// BOOLTRAITS {'IsFixedSize': True, 'IsMessage': True, 'HasHeader': False}
 // {'path_finder': ['/home/abdo/pathfinder_ws/src/path_finder/msg'], 'std_msgs': ['/opt/ros/kinetic/share/std_msgs/cmake/../msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
@@ -130,12 +115,12 @@ namespace message_traits
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::path_finder::ard_<ContainerAllocator> >
-  : FalseType
+  : TrueType
   { };
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::path_finder::ard_<ContainerAllocator> const>
-  : FalseType
+  : TrueType
   { };
 
 template <class ContainerAllocator>
@@ -164,12 +149,12 @@ struct MD5Sum< ::path_finder::ard_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "db57fb1eab133016c7f00c01572b2004";
+    return "5ab222d10bef5cb8f3d8c151fb86bd8b";
   }
 
   static const char* value(const ::path_finder::ard_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xdb57fb1eab133016ULL;
-  static const uint64_t static_value2 = 0xc7f00c01572b2004ULL;
+  static const uint64_t static_value1 = 0x5ab222d10bef5cb8ULL;
+  static const uint64_t static_value2 = 0xf3d8c151fb86bd8bULL;
 };
 
 template<class ContainerAllocator>
@@ -188,10 +173,7 @@ struct Definition< ::path_finder::ard_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "uint32 seq\n\
-time stamp\n\
-string frame_id\n\
-float64 ult_right\n\
+    return "float64 ult_right\n\
 float64 ult_left\n\
 float64 ir_right\n\
 float64 ir_left\n\
@@ -217,9 +199,6 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.seq);
-      stream.next(m.stamp);
-      stream.next(m.frame_id);
       stream.next(m.ult_right);
       stream.next(m.ult_left);
       stream.next(m.ir_right);
@@ -246,12 +225,6 @@ struct Printer< ::path_finder::ard_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::path_finder::ard_<ContainerAllocator>& v)
   {
-    s << indent << "seq: ";
-    Printer<uint32_t>::stream(s, indent + "  ", v.seq);
-    s << indent << "stamp: ";
-    Printer<ros::Time>::stream(s, indent + "  ", v.stamp);
-    s << indent << "frame_id: ";
-    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.frame_id);
     s << indent << "ult_right: ";
     Printer<double>::stream(s, indent + "  ", v.ult_right);
     s << indent << "ult_left: ";

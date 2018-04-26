@@ -18,9 +18,6 @@ class ard {
   constructor(initObj={}) {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
-      this.seq = null;
-      this.stamp = null;
-      this.frame_id = null;
       this.ult_right = null;
       this.ult_left = null;
       this.ir_right = null;
@@ -31,24 +28,6 @@ class ard {
       this.servo_angle = null;
     }
     else {
-      if (initObj.hasOwnProperty('seq')) {
-        this.seq = initObj.seq
-      }
-      else {
-        this.seq = 0;
-      }
-      if (initObj.hasOwnProperty('stamp')) {
-        this.stamp = initObj.stamp
-      }
-      else {
-        this.stamp = {secs: 0, nsecs: 0};
-      }
-      if (initObj.hasOwnProperty('frame_id')) {
-        this.frame_id = initObj.frame_id
-      }
-      else {
-        this.frame_id = '';
-      }
       if (initObj.hasOwnProperty('ult_right')) {
         this.ult_right = initObj.ult_right
       }
@@ -102,12 +81,6 @@ class ard {
 
   static serialize(obj, buffer, bufferOffset) {
     // Serializes a message object of type ard
-    // Serialize message field [seq]
-    bufferOffset = _serializer.uint32(obj.seq, buffer, bufferOffset);
-    // Serialize message field [stamp]
-    bufferOffset = _serializer.time(obj.stamp, buffer, bufferOffset);
-    // Serialize message field [frame_id]
-    bufferOffset = _serializer.string(obj.frame_id, buffer, bufferOffset);
     // Serialize message field [ult_right]
     bufferOffset = _serializer.float64(obj.ult_right, buffer, bufferOffset);
     // Serialize message field [ult_left]
@@ -131,12 +104,6 @@ class ard {
     //deserializes a message object of type ard
     let len;
     let data = new ard(null);
-    // Deserialize message field [seq]
-    data.seq = _deserializer.uint32(buffer, bufferOffset);
-    // Deserialize message field [stamp]
-    data.stamp = _deserializer.time(buffer, bufferOffset);
-    // Deserialize message field [frame_id]
-    data.frame_id = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [ult_right]
     data.ult_right = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [ult_left]
@@ -157,9 +124,7 @@ class ard {
   }
 
   static getMessageSize(object) {
-    let length = 0;
-    length += object.frame_id.length;
-    return length + 80;
+    return 64;
   }
 
   static datatype() {
@@ -169,15 +134,12 @@ class ard {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'db57fb1eab133016c7f00c01572b2004';
+    return '5ab222d10bef5cb8f3d8c151fb86bd8b';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
-    uint32 seq
-    time stamp
-    string frame_id
     float64 ult_right
     float64 ult_left
     float64 ir_right
@@ -196,27 +158,6 @@ class ard {
       msg = {};
     }
     const resolved = new ard(null);
-    if (msg.seq !== undefined) {
-      resolved.seq = msg.seq;
-    }
-    else {
-      resolved.seq = 0
-    }
-
-    if (msg.stamp !== undefined) {
-      resolved.stamp = msg.stamp;
-    }
-    else {
-      resolved.stamp = {secs: 0, nsecs: 0}
-    }
-
-    if (msg.frame_id !== undefined) {
-      resolved.frame_id = msg.frame_id;
-    }
-    else {
-      resolved.frame_id = ''
-    }
-
     if (msg.ult_right !== undefined) {
       resolved.ult_right = msg.ult_right;
     }
