@@ -40,7 +40,7 @@ def logUltServo(data):
     ultRight = data.data[0]
     ultLeft = data.data[1]
     servoAngle = data.data[2]
-    avoid_ob()
+    # avoid_ob()
 
 
 def logIr(data):
@@ -69,14 +69,14 @@ def avoid_ob():
     global ultLeft
     global servoAngle
     pub = rospy.Publisher('/cmd_vel_action', UInt16MultiArray, queue_size=10)
-    rate = rospy.Rate(2)  # 10hz
+    rate = rospy.Rate(3)  # 10hz
     action_msg = UInt16MultiArray()
-    if ultRight <= 20 or ultLeft <= 20:
+    if ultRight <= 30 or ultLeft <= 30:
         if servoAngle == 40:
             action_msg.data = [0, 1]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
-            time.sleep(1.2)
+            time.sleep(1)
             action_msg.data = [0, 4]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
@@ -84,7 +84,7 @@ def avoid_ob():
             action_msg.data = [60, 2]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
-            time.sleep(1.2)
+            time.sleep(1)
             # avoid obstacle from the right
             # turn left
             # then right
@@ -97,7 +97,7 @@ def avoid_ob():
             action_msg.data = [140, 2]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
-            time.sleep(1.2)
+            time.sleep(1)
             action_msg.data = [140, 4]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
@@ -105,29 +105,25 @@ def avoid_ob():
             action_msg.data = [60, 1]
             rospy.loginfo(action_msg)
             pub.publish(action_msg)
-            time.sleep(1.2)
+            time.sleep(1)
             servoAngle = 60
         rate.sleep()
-    else:
-        global servo_status
-        pub = rospy.Publisher('/cmd_vel_action', UInt16MultiArray, queue_size=10)
-        rate = rospy.Rate(2)  # 10hz
-        action_msg = UInt16MultiArray()
-        if servo_status == 1:
-            action_msg.data = [40, 4]
-            servo_status = 2
-        elif servo_status == 2:
-            action_msg.data = [60, 4]
-            servo_status = 3
-        elif servo_status == 3:
-            action_msg.data = [90, 4]
-            servo_status = 4
-        elif servo_status == 4:
-            action_msg.data = [60, 4]
-            servo_status = 1
-        rospy.loginfo(action_msg)
-        pub.publish(action_msg)
-        rate.sleep()
+
+    global servo_status
+    if servo_status == 1:
+        action_msg.data = [40, 4]
+        servo_status = 2
+    elif servo_status == 2:
+        action_msg.data = [60, 4]
+        servo_status = 3
+    elif servo_status == 3:
+        action_msg.data = [90, 4]
+        servo_status = 4
+    elif servo_status == 4:
+        action_msg.data = [60, 4]
+        servo_status = 1
+    rospy.loginfo(action_msg)
+    pub.publish(action_msg)
 
 
 def avoid_drop():
@@ -142,7 +138,7 @@ def avoid_drop():
     right_direction = 225
     # publisher code
     pub = rospy.Publisher('/cmd_vel_action', UInt16MultiArray, queue_size=10)
-    rate = rospy.Rate(10)  # 10hz
+    rate = rospy.Rate(3)  # 10hz
     action_msg = UInt16MultiArray()
     while not rospy.is_shutdown():
         if currentIrRight > ir_right + 10 and currentIrLeft < ir_left + 10:
@@ -234,6 +230,8 @@ def listener():
     rospy.Subscriber("/ult_srv_NF", Float64MultiArray, logUltServo)
     rospy.Subscriber("/infrared", Float64MultiArray, logIr)
     # rospy.Subscriber("/distance", Float64MultiArray, logIr)
+
+    avoid_drop()
     rospy.spin()
 
 if __name__ == '__main__':
